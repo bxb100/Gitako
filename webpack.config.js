@@ -43,9 +43,7 @@ const plugins = [
         }
 
         if (!IN_PRODUCTION_MODE) {
-          Object.assign(manifest, {
-            web_accessible_resources: manifest.web_accessible_resources.concat('*.map'), // enable source mapping while developing
-          })
+          manifest.web_accessible_resources[0].resources.push('*.map') // enable source mapping while developing
         }
         return JSON.stringify(manifest)
       },
@@ -116,7 +114,8 @@ module.exports = {
         test: /\.m?js$/,
         loader: 'babel-loader',
         // Transpile as least files under node_modules
-        include: /node_modules\/(webext-content-scripts|webext-detect-page|superstruct)\/.*\.m?js$/,
+        include:
+          /node_modules\/(webextension-polyfill|webext-content-scripts|webext-detect-page|superstruct)\/.*\.m?js$/,
         options: {
           cacheDirectory: true,
         },

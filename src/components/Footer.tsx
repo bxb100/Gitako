@@ -1,4 +1,4 @@
-import { GearIcon, SyncIcon } from '@primer/octicons-react'
+import { BookmarkIcon, GearIcon, SyncIcon } from '@primer/octicons-react'
 import { Link } from '@primer/react'
 import { ReloadContext } from 'containers/ReloadContext'
 import { VERSION } from 'env'
@@ -8,10 +8,11 @@ import { wikiLinks } from './settings/SettingsBar'
 
 type Props = {
   toggleShowSettings: () => void
+  toggleShowBookmarks: () => void
 }
 
 export function Footer(props: Props) {
-  const { toggleShowSettings } = props
+  const { toggleShowSettings, toggleShowBookmarks } = props
   const reload = React.useContext(ReloadContext)
   return (
     <div className={'gitako-footer'}>
@@ -40,6 +41,12 @@ export function Footer(props: Props) {
           icon={SyncIcon}
           iconColor="fg.muted"
           onClick={() => reload()}
+        />
+        <RoundIconButton
+          aria-label={'Reload'}
+          icon={BookmarkIcon}
+          iconColor="fg.muted"
+          onClick={toggleShowBookmarks}
         />
         <RoundIconButton
           aria-label={'Settings'}

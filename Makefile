@@ -58,3 +58,7 @@ compress-env:
 
 compress-icons-into-source-for-mz-review:
 	zip -r dist/source-$(FULL_VERSION).zip vscode-icons/icons
+
+PHONY: chrome
+chrome:
+	web-ext run --target chromium

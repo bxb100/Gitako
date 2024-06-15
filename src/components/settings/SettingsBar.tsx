@@ -54,7 +54,13 @@ const moreFields: SimpleConfigField<'copySnippetButton' | 'codeFolding' | 'pjaxM
       ]
     : []
 
-export function SettingsBarContent({ toggleShow }: { toggleShow: () => void }) {
+export function SettingsBarContent({
+  toggleShowSettings,
+  toggleShowBookmarks,
+}: {
+  toggleShowSettings: () => void
+  toggleShowBookmarks: () => void
+}) {
   const useReloadHint = useStateIO<React.ReactNode>('')
   const { value: reloadHint } = useReloadHint
 
@@ -68,7 +74,7 @@ export function SettingsBarContent({ toggleShow }: { toggleShow: () => void }) {
         <h2 className={'gitako-settings-bar-title'}>Settings</h2>
         <RoundIconButton
           aria-label="Close settings"
-          onClick={toggleShow}
+          onClick={toggleShowSettings}
           size="medium"
           iconSize={20}
           icon={ChevronDownIcon}
@@ -111,7 +117,7 @@ export function SettingsBarContent({ toggleShow }: { toggleShow: () => void }) {
           </div>
         </SettingsSection>
       </Box>
-      <Footer toggleShowSettings={toggleShow} />
+      <Footer toggleShowSettings={toggleShowSettings} toggleShowBookmarks={toggleShowBookmarks} />
     </div>
   )
 }

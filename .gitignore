@@ -6,3 +6,5 @@ dist
 yarn-error.log
 vscode-icons
 firefox-profile
+__tests__/web-ext-profile
+!__tests__/web-ext-profile/.gitkeep

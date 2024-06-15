@@ -32,6 +32,15 @@ $minimal-z-index: max(
   }
 }
 
+// bookmark button
+.#{$name}-bookmark-btn {
+  display: flex;
+  cursor: pointer;
+  img {
+    width: 16px;
+  }
+}
+
 [data-#{$name}-ready='true'] {
   @include code-folding;
 
@@ -575,6 +584,52 @@ html[data-with-gitako-spacing='true'] {
         display: flex;
         .access-token-input {
           flex: 1;
+        }
+      }
+    }
+
+    .#{$name}-bookmark-bar {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      z-index: 3;
+      overflow: hidden; // prevent box-shadow of children overflow
+      background: var(--color-bg-subtle);
+
+      &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 10px;
+        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+          0 3px 3px -2px rgba(0, 0, 0, 0.12);
+        z-index: 3;
+      }
+
+      &-content {
+        padding: 10px 10px;
+        flex: 1;
+        overflow: auto;
+        position: relative;
+
+        .shadow-shelter {
+          position: absolute;
+          width: 100%;
+          height: 10px;
+          top: 0;
+          left: 0;
+          background: var(--color-bg-subtle);
+          z-index: 3;
+        }
+
+        ul {
+          position: absolute;
+          width: 100%;
+          li {
+            display: inline-block;
+          }
         }
       }
     }

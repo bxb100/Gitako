@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Gitako - GitHub file tree",
   "icons": {
     "64": "icons/Gitako-64.png",
@@ -9,15 +9,18 @@
   "permissions": [
     "storage",
     "contextMenus",
-    "activeTab",
-    "*://*.github.com/*",
-    "*://gitako.enix.one/*",
-    "*://*.sentry.io/*"
+    "activeTab"
   ],
+  "host_permissions": ["*://*.github.com/*", "*://gitako.enix.one/*", "*://*.sentry.io/*"],
   "optional_permissions": ["http://*/*", "https://*/*"],
-  "web_accessible_resources": ["icons/vscode/*", "content.css"],
+  "web_accessible_resources": [{
+    "resources": ["icons/vscode/*", "content.css", "icons/*.svg"],
+    "matches": ["<all_urls>"]
+  }],
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js",
+    "scripts": ["background.js"],
+    "type": "module"
   },
   "browser_action": {
     "default_icon": "icons/Gitako.png"

@@ -30,6 +30,8 @@ import { RoundIconButton } from './RoundIconButton'
 import { SettingsBarContent } from './settings/SettingsBar'
 import { SidebarContext } from './SidebarContext'
 import { SideBarResizeHandler } from './SideBarResizeHandler'
+import { BookmarkContent } from './bookmark'
+import { useState } from 'react'
 
 export function SideBar() {
   usePJAXAPI()
@@ -135,8 +137,26 @@ export function SideBar() {
               <IIFC>
                 {() => {
                   const [showSettings, setShowSettings] = React.useState(false)
+                  const [showBookmarks, setShowBookmarks] = useState(false)
                   const toggleShowSettings = React.useCallback(
-                    () => setShowSettings(show => !show),
+                    () =>
+                      setShowSettings(show => {
+                        if (!show) {
+                          setShowBookmarks(false)
+                        }
+                        return !show
+                      }),
+                    [],
+                  )
+
+                  const toggleShowBookmarks = React.useCallback(
+                    () =>
+                      setShowBookmarks(show => {
+                        if (!show) {
+                          setShowSettings(false)
+                        }
+                        return !show
+                      }),
                     [],
                   )
 
@@ -147,8 +167,22 @@ export function SideBar() {
 
                   return (
                     <>
-                      {showSettings && <SettingsBarContent toggleShow={toggleShowSettings} />}
-                      <Footer toggleShowSettings={toggleShowSettings} />
+                      {showBookmarks && (
+                        <BookmarkContent
+                          toggleShowSettings={toggleShowSettings}
+                          toggleShowBookmarks={toggleShowBookmarks}
+                        />
+                      )}
+                      {showSettings && (
+                        <SettingsBarContent
+                          toggleShowSettings={toggleShowSettings}
+                          toggleShowBookmarks={toggleShowBookmarks}
+                        />
+                      )}
+                      <Footer
+                        toggleShowSettings={toggleShowSettings}
+                        toggleShowBookmarks={toggleShowBookmarks}
+                      />
                     </>
                   )
                 }}

@@ -136,6 +136,62 @@ export function insertLogoMountPoint() {
   return $(formatID(id), undefined, () => insertMountPoint().appendChild(create()))
 }
 
+const bookmarkIcon = browser.runtime.getURL('icons/bookmark.svg')
+const bookmarkOutlineIcon = browser.runtime.getURL('icons/bookmark-outline.svg')
+export function insertBookmarkLink() {
+  if (window.location.host !== 'github.com') return
+  if (window.location.pathname.split('/').length !== 3) return
+
+  const create = () => {
+    const link = document.createElement('a')
+    link.classList.add('gitako-bookmark-btn')
+    link.setAttribute('data-url', window.location.href)
+    link.setAttribute('data-type', 'r')
+    link.hidden = true
+    const img = document.createElement('img')
+    link.appendChild(img)
+    browser.runtime
+      .sendMessage({
+        type: 'is-bookmarked',
+        data: {
+          url: window.location.href,
+        },
+      })
+      .then(isBookmarked => {
+        img.src = isBookmarked ? bookmarkIcon : bookmarkOutlineIcon
+        link.hidden = false
+      })
+    link.onclick = () => {
+      browser.runtime
+        .sendMessage({
+          type: 'toggle-bookmarks',
+          data: {
+            url: window.location.href,
+            type: 'r',
+            timestamp: Date.now(),
+          },
+        })
+        .then(flag => {
+          img.src = flag ? bookmarkIcon : bookmarkOutlineIcon
+        })
+    }
+    browser.storage.onChanged.addListener(changes => {
+      if (changes.gitakoBookmarks) {
+        const bookmarks = JSON.parse(changes.gitakoBookmarks.newValue)
+        const isBookmarked = (bookmarks || []).some(
+          (item: { url: string }) => item.url === window.location.href,
+        )
+        img.src = isBookmarked ? bookmarkIcon : bookmarkOutlineIcon
+      }
+    })
+
+    return link
+  }
+  return $('.AppHeader-context-full li:last-child', element => {
+    element.childElementCount === 1 && element.appendChild(create())
+  })
+}
+
 /**
  * content above the file navigation bar is same for all pages of the repo
  * use this function to scroll down a bit to hide them
