@@ -627,8 +627,16 @@ html[data-with-gitako-spacing='true'] {
         ul {
           position: absolute;
           width: 100%;
+          word-break: break-all;
           li {
             display: inline-block;
+            span:first-child {
+              display: inline-block;
+              width: 100%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
           }
         }
       }

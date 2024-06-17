@@ -4,6 +4,7 @@
 
 import { platformName } from 'platforms'
 import { $ } from './$'
+import { githubURL } from './URLHelper'
 
 export const rootElementID = 'gitako-root'
 export const gitakoDescriptionTarget = document.documentElement
@@ -139,13 +140,14 @@ export function insertLogoMountPoint() {
 const bookmarkIcon = browser.runtime.getURL('icons/bookmark.svg')
 const bookmarkOutlineIcon = browser.runtime.getURL('icons/bookmark-outline.svg')
 export function insertBookmarkLink() {
-  if (window.location.host !== 'github.com') return
-  if (window.location.pathname.split('/').length !== 3) return
+  const github = githubURL()
+  if (github == null) return
 
+  const url = `${github.protocol}//${github.host}/${github.owner}/${github.repo}`
   const create = () => {
     const link = document.createElement('a')
     link.classList.add('gitako-bookmark-btn')
-    link.setAttribute('data-url', window.location.href)
+    link.setAttribute('data-url', url)
     link.setAttribute('data-type', 'r')
     link.hidden = true
     const img = document.createElement('img')
@@ -154,7 +156,7 @@ export function insertBookmarkLink() {
       .sendMessage({
         type: 'is-bookmarked',
         data: {
-          url: window.location.href,
+          url: url,
         },
       })
       .then(isBookmarked => {
@@ -166,7 +168,7 @@ export function insertBookmarkLink() {
         .sendMessage({
           type: 'toggle-bookmarks',
           data: {
-            url: window.location.href,
+            url: url,
             type: 'r',
             timestamp: Date.now(),
           },
@@ -178,9 +180,7 @@ export function insertBookmarkLink() {
     browser.storage.onChanged.addListener(changes => {
       if (changes.gitakoBookmarks) {
         const bookmarks = JSON.parse(changes.gitakoBookmarks.newValue)
-        const isBookmarked = (bookmarks || []).some(
-          (item: { url: string }) => item.url === window.location.href,
-        )
+        const isBookmarked = (bookmarks || []).some((item: { url: string }) => item.url === url)
         img.src = isBookmarked ? bookmarkIcon : bookmarkOutlineIcon
       }
     })

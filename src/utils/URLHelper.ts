@@ -15,3 +15,13 @@ export const sanitizedLocation = {
     return pathname.replace(/^\/\/+/g, '/')
   },
 }
+
+export const githubURL = () => {
+  const { protocol, host, pathname } = window.location
+  if (host !== 'github.com') return null
+  const paths = pathname.split('/')
+  if (paths.length < 3) return null
+
+  const [owner, repo, ...rest] = paths.slice(1)
+  return { protocol, host, owner, repo, rest }
+}
